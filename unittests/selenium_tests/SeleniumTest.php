@@ -58,14 +58,20 @@ class SeleniumTest extends Sauce\Sausage\WebDriverTestCase
             $this->setDesiredCapabilities($caps);
         }
 
-        $this->setSeleniumServerRequestsTimeout(120);
+        if(getenv('SELENIUM_HOST') === true) {
+            $this->create(getenv('SELENIUM_HOST'), $this->getDesiredCapabilities());
+        }
+        else {           
+            $this->setSeleniumServerRequestsTimeout(120);
+        }
     }
 
     public function __construct($name = NULL, array $data = array(), $dataName = '')
     {
         require_once('includes/init.php');
 
-        if(getenv('SAUCE_USERNAME') === false)
+        if(getenv('SELENIUM_HOST') === false && 
+           getenv('SAUCE_USERNAME') === false)
         {
 
             if (Config::get('sauce_username') == null || Config::get('sauce_access_key') == null) {
